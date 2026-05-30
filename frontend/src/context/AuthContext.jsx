@@ -10,6 +10,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const initAuth = async () => {
       const token = localStorage.getItem('token');
+
       if (token) {
         try {
           const res = await api.get('/user/me');
@@ -20,50 +21,53 @@ export const AuthProvider = ({ children }) => {
           localStorage.removeItem('user');
         }
       }
+
       setLoading(false);
     };
+
     initAuth();
   }, []);
 
   const login = async (email, password) => {
-    const response = await api.post('/auth/authenticate', { email, password });
+    const response = await api.post('/auth/authenticate', {
+      email,
+      password,
+    });
+
     const { token } = response.data;
+
     localStorage.setItem('token', token);
-    
-    // Fetch full user profile
+
     const userRes = await api.get('/user/me');
+
     localStorage.setItem('user', JSON.stringify(userRes.data));
     setUser(userRes.data);
   };
 
-  const sendOtp = async (email, purpose) => {
-    await api.post(purpose === 'REGISTER' ? '/auth/send-otp' : '/auth/forgot-password/send', { email });
-  };
-
-  const verifyOtp = async (email, otp, purpose) => {
-    const res = await api.post(purpose === 'REGISTER' ? '/auth/verify-otp' : '/auth/forgot-password/verify', { email, otp });
-    return res.data; // true or false
-  };
-
-  const register = async ({ fullName, email, password, otp }) => {
+  const register = async ({ fullName, email, password }) => {
     const response = await api.post('/auth/register', {
       fullName,
       email,
       password,
-      otp,
-      monthlyBudget: 0
+      monthlyBudget: 0,
     });
+
     const { token } = response.data;
+
     localStorage.setItem('token', token);
-    
-    // Fetch full user profile
+
     const userRes = await api.get('/user/me');
+
     localStorage.setItem('user', JSON.stringify(userRes.data));
     setUser(userRes.data);
   };
 
   const resetPassword = async (email, otp, newPassword) => {
-    await api.post('/auth/forgot-password/reset', { email, otp, newPassword });
+    await api.post('/auth/forgot-password/reset', {
+      email,
+      otp,
+      newPassword,
+    });
   };
 
   const updateUser = (updatedData) => {
@@ -78,7 +82,17 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, sendOtp, verifyOtp, register, resetPassword, logout, loading, updateUser }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        login,
+        register,
+        resetPassword,
+        logout,
+        loading,
+        updateUser,
+      }}
+    >
       {!loading && children}
     </AuthContext.Provider>
   );
