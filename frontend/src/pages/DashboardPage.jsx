@@ -139,12 +139,6 @@ const DashboardPage = () => {
           <p className="text-text-secondary font-medium mt-1">Here is your financial overview for {new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</p>
         </div>
         <div className="flex gap-2">
-          <button onClick={handleExportCSV} className="btn-secondary py-2 px-4 flex items-center gap-2 text-sm">
-            <TableCellsIcon className="w-4 h-4" /> Export CSV
-          </button>
-          <button onClick={handleExportPDF} className="btn-secondary py-2 px-4 flex items-center gap-2 text-sm">
-            <DocumentArrowDownIcon className="w-4 h-4" /> Export PDF
-          </button>
         </div>
       </header>
 
