@@ -64,33 +64,32 @@ public class AuthService {
     }
 
     @Transactional
-    public AuthenticationResponse register(RegisterRequest request) {
-        // Verify OTP first
-        verifyOtp(request.getEmail(), request.getOtp(), VerificationOtp.Purpose.REGISTER);
+public AuthenticationResponse register(RegisterRequest request) {
 
-        if (repository.findByEmail(request.getEmail()).isPresent()) {
-            throw new RuntimeException("Email already exists");
-        }
-        
-        var user = User.builder()
-                .fullName(request.getFullName())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .monthlyBudget(request.getMonthlyBudget() != null ? request.getMonthlyBudget() : 0.0)
-                .build();
-        repository.save(user);
-        
-        // Delete OTP after successful registration
-        otpRepository.deleteByEmailAndPurpose(request.getEmail(), VerificationOtp.Purpose.REGISTER);
+    // OTP verification temporarily disabled
 
-        var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .fullName(user.getFullName())
-                .email(user.getEmail())
-                .monthlyBudget(user.getMonthlyBudget())
-                .build();
+    if (repository.findByEmail(request.getEmail()).isPresent()) {
+        throw new RuntimeException("Email already exists");
     }
+
+    var user = User.builder()
+            .fullName(request.getFullName())
+            .email(request.getEmail())
+            .password(passwordEncoder.encode(request.getPassword()))
+            .monthlyBudget(request.getMonthlyBudget() != null ? request.getMonthlyBudget() : 0.0)
+            .build();
+
+    repository.save(user);
+
+    var jwtToken = jwtService.generateToken(user);
+
+    return AuthenticationResponse.builder()
+            .token(jwtToken)
+            .fullName(user.getFullName())
+            .email(user.getEmail())
+            .monthlyBudget(user.getMonthlyBudget())
+            .build();
+}
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(
@@ -110,16 +109,15 @@ public class AuthService {
                 .build();
     }
 
-    @Transactional
-    public void resetPassword(String email, String otpCode, String newPassword) {
-        verifyOtp(email, otpCode, VerificationOtp.Purpose.RESET_PASSWORD);
-        
-        User user = repository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-                
-        user.setPassword(passwordEncoder.encode(newPassword));
-        repository.save(user);
-        
-        otpRepository.deleteByEmailAndPurpose(email, VerificationOtp.Purpose.RESET_PASSWORD);
-    }
+   @Transactional
+public void resetPassword(String email, String otpCode, String newPassword) {
+
+    // OTP verification temporarily disabled
+
+    User user = repository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+
+    user.setPassword(passwordEncoder.encode(newPassword));
+    repository.save(user);
+}
 }

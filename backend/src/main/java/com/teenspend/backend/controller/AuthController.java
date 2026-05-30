@@ -18,16 +18,14 @@ public class AuthController {
     private final AuthService service;
 
     @PostMapping("/send-otp")
-    public ResponseEntity<Void> sendOtp(@RequestBody OtpRequest request) {
-        service.sendOtp(request.getEmail(), VerificationOtp.Purpose.REGISTER);
-        return ResponseEntity.ok().build();
-    }
+public ResponseEntity<Void> sendOtp(@RequestBody OtpRequest request) {
+    return ResponseEntity.ok().build();
+}
 
     @PostMapping("/verify-otp")
-    public ResponseEntity<Boolean> verifyOtp(@RequestBody OtpRequest request) {
-        boolean isValid = service.verifyOtp(request.getEmail(), request.getOtp(), VerificationOtp.Purpose.REGISTER);
-        return ResponseEntity.ok(isValid);
-    }
+public ResponseEntity<Boolean> verifyOtp(@RequestBody OtpRequest request) {
+    return ResponseEntity.ok(true);
+}
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
@@ -44,16 +42,14 @@ public class AuthController {
     }
 
     @PostMapping("/forgot-password/send")
-    public ResponseEntity<Void> forgotPasswordSend(@RequestBody OtpRequest request) {
-        service.sendOtp(request.getEmail(), VerificationOtp.Purpose.RESET_PASSWORD);
-        return ResponseEntity.ok().build();
-    }
+public ResponseEntity<Void> forgotPasswordSend(@RequestBody OtpRequest request) {
+    return ResponseEntity.ok().build();
+}
 
     @PostMapping("/forgot-password/verify")
-    public ResponseEntity<Boolean> forgotPasswordVerify(@RequestBody OtpRequest request) {
-        boolean isValid = service.verifyOtp(request.getEmail(), request.getOtp(), VerificationOtp.Purpose.RESET_PASSWORD);
-        return ResponseEntity.ok(isValid);
-    }
+public ResponseEntity<Boolean> forgotPasswordVerify(@RequestBody OtpRequest request) {
+    return ResponseEntity.ok(true);
+}
 
     @PostMapping("/forgot-password/reset")
     public ResponseEntity<Void> forgotPasswordReset(@RequestBody OtpRequest request) {
