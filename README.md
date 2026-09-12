@@ -7,7 +7,7 @@ Smart Personal Finance Management Platform for Students & Young Professionals
 </h3>
 
 <p align="center">
-Take control of your finances with a modern, secure and intelligent expense management platform built using React, Spring Boot and MySQL.
+Take full control of your finances with a modern, secure and intelligent expense management platform built using React, Spring Boot and MySQL.
 </p>
 
 <p align="center">
